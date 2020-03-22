@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WI Work Comp Rater</title>
+
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        alert("hi");
+
+       let request =
+           {
+               "state": "WI",
+               "assignedRisk": false,
+               "classPayrolls": [
+                   {"classId": "2003", "payroll": 50000, "employeeCount": 2},
+                   {"classId": "2014", "payroll": 50000, "employeeCount": 2},
+                   {"classId": "2014", "payroll": 2000, "employeeCount": 2}
+               ],
+               "employersLiabilityLimit": "3000/3000/3000",
+               "experienceMod": 1.2,
+               "waiverOfSubrogationPurchasePerContract": true,
+               "waiverOfSubrogationNumberOfContracts": 5,
+               "premiumDiscountPlan": "A",
+               "selectForeignTerrorismCoverage": true,
+               "selectDomesticTerrorismCoverage": true,
+               "dividendPercent": 0.25,
+               "purchaseWaiverOfSubrogationBlanket": true,
+               "purchaseWaiverOfSubrogationBlanketPerContract": true,
+               "numberOfContracts": 5
+           };
+
+        $.ajax({
+            url: 'https://darsrn7pi4.execute-api.us-east-2.amazonaws.com/default/jasonWiRater3',
+            type: 'PUT',
+            crossDomain: true,
+            beforeSend: function(xhr){
+                xhr.withCredentials = true;
+            },
+            success: function(result) {
+                // Do something with the result
+                alert(result);
+            }
+        });
+
+    </script>
+</head>
+<body>
+i'm alive
+
+</body>
+</html>
