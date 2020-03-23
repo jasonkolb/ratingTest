@@ -76,7 +76,6 @@
             return -1;
         }
 
-
         let displayResponse = function( response ){
 
             if( response.status === "declined" )
@@ -97,7 +96,7 @@
             // $('#results').html($(tr.join('')));
 
             $("#status").html(response.status);
-            $("#explanation").html(response.explanation);
+            $("#explanation").html(response.declineReason);
             $("#payrollClassesPremiumTotal").html(response.payrollClassesPremiumTotal);
             $("#nonPayrollClassesPremiumTotal").html(response.nonPayrollClassesPremiumTotal);
             $("#expModifiedSubjectPremiumExcludingEL").html(response.expModifiedSubjectPremiumExcludingEL);
