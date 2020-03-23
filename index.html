@@ -121,7 +121,14 @@
                 $("#trace").html(html);
             }
 
-
+            $('.currency-usd').each(function() {
+                var monetary_value = $(this).text();
+                var i = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(monetary_value);
+                $(this).text(i);
+            });
 
             // Status: <span id="status"></span><br>
             // Explanation: <span id="explanation"></span><br>
@@ -138,7 +145,7 @@
 </head>
 <body>
 
-    <table>
+    <table cellspacing="5">
         <tr>
             <td>State</td>
             <td>
@@ -271,26 +278,61 @@
         </tr>
     </table>
 
-    <button id="btnGetRate">Get a rate now</button>
-
+    <button id="btnGetRate" style="width: 200px; height: 100px;">Get a rate now</button>
+<p>
+    &nbsp;
+</p>
     <table>
         <tr>
             <td>
                 <div id="results">
-                    Status: <span id="status" style="font-weight: bold"></span><br>
-                    Explanation: <span id="explanation"></span><br>
-                    payrollClassesPremiumTotal: <span id="payrollClassesPremiumTotal"></span><br>
-                    nonPayrollClassesPremiumTotal: <span id="nonPayrollClassesPremiumTotal"></span><br>
-                    expModifiedSubjectPremiumExcludingEL: <span id="expModifiedSubjectPremiumExcludingEL"></span><br>
-                    maxClassMinimumPremium: <span id="maxClassMinimumPremium"></span><br>
-                    balanceToAchieveMinimumPremium: <span id="balanceToAchieveMinimumPremium"></span><br>
-                    balalanceToMinimumPremiumAdmiraltyFELA: <span id="balalanceToMinimumPremiumAdmiraltyFELA"></span><br>
-                    estimatedAnnualPremium: <span id="estimatedAnnualPremium" style="font-weight: bold"></span><br>
-                    estimatedDividend: <span id="estimatedDividend"></span><br>
+                    <table  cellspacing="5">
+                        <TR>
+                            <TD>
+                                <h1>Status</h1>
+                            </TD>
+                            <td>
+                                <h1><span id="status" style="font-weight: bold"></span></h1>
+                            </td>
+                        </TR>
+                        <tr>
+                            <td>
+                                <h2>estimatedAnnualPremium</h2>
+                            </td>
+                            <td>
+                                <h2><span class="currency-usd" id="estimatedAnnualPremium" style="font-weight: bold"></span></h2>
+                            </td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td><h3>estimatedDividend</h3></td>
+                            <td><h3><span class="currency-usd" id="estimatedDividend"></span></h3></td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>Decline explanation</td>
+                            <td><span id="explanation"></span></td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>payrollClassesPremiumTotal</td>
+                            <td><span class="currency-usd" id="payrollClassesPremiumTotal"></span></td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>nonPayrollClassesPremiumTotal</td>
+                            <td><span class="currency-usd" id="nonPayrollClassesPremiumTotal"></span></td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>expModifiedSubjectPremiumExcludingEL</td>
+                            <td><span class="currency-usd" id="expModifiedSubjectPremiumExcludingEL"></span></td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>balanceToAchieveMinimumPremium</td>
+                            <td><span class="currency-usd" id="balanceToAchieveMinimumPremium"></span></td>
+                        </tr>
+
+                    </table>
+
                 </div>
             </td>
             <td>
-                Trace:<br>
                 <div id="trace">
 
                 </div>
