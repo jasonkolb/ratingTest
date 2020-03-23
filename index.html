@@ -4,54 +4,301 @@
     <meta charset="UTF-8">
     <title>WI Work Comp Rater</title>
 
+
+    <style>
+        body, div {
+            padding: 50px;
+        }
+
+        .results {
+            color: maroon;
+            margin-left: 40px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
     <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
 
     <script type="text/javascript">
-        alert("hi");
 
-       let request =
-           {
-               "state": "WI",
-               "assignedRisk": false,
-               "classPayrolls": [
-                   {"classId": "2003", "payroll": 50000, "employeeCount": 2},
-                   {"classId": "2014", "payroll": 50000, "employeeCount": 2},
-                   {"classId": "2014", "payroll": 2000, "employeeCount": 2}
-               ],
-               "employersLiabilityLimit": "3000/3000/3000",
-               "experienceMod": 1.2,
-               "waiverOfSubrogationPurchasePerContract": true,
-               "waiverOfSubrogationNumberOfContracts": 5,
-               "premiumDiscountPlan": "A",
-               "selectForeignTerrorismCoverage": true,
-               "selectDomesticTerrorismCoverage": true,
-               "dividendPercent": 0.25,
-               "purchaseWaiverOfSubrogationBlanket": true,
-               "purchaseWaiverOfSubrogationBlanketPerContract": true,
-               "numberOfContracts": 5
-           };
+        $(document).ready(function() {
 
-        $.ajax({
-            url: 'https://darsrn7pi4.execute-api.us-east-2.amazonaws.com/default/jasonWiRater3',
-            type: 'POST',
-            crossDomain: true,
-            beforeSend: function(xhr){
-                xhr.withCredentials = true;
-            },
-            success: function(result) {
-                // Do something with the result
-                console.log(result);
-            }
+            $("#results").hide();
+            $("#btnGetRate").click(function (event) {
+                getRate();
+                event.preventDefault();
+            });
         });
 
+        function getRate() {
+            let request =
+                {
+                    "state": $('#state').valueOf().val(),
+                    "assignedRisk": $( "#assignedRisk" ).prop( "checked"),
+                    "classPayrolls": [
+                        {"classId": $("#class1").valueOf().val(), "payroll": $("#payroll1").valueOf().val(), "employeeCount": $("#employeeCount1").valueOf().val()},
+                        {"classId": $("#class2").valueOf().val(), "payroll": $("#payroll2").valueOf().val(), "employeeCount": $("#employeeCount2").valueOf().val()},
+                        {"classId": $("#class3").valueOf().val(), "payroll": $("#payroll3").valueOf().val(), "employeeCount": $("#employeeCount3").valueOf().val()},
+                    ],
+                    "employersLiabilityLimit": $("#employersLiabilityLimit").valueOf().val(),
+                    "experienceMod": $("#experienceMod").valueOf().val(),
+                    "waiverOfSubrogationPurchasePerContract": $("#waiverOfSubrogationPurchasePerContract").valueOf().val(),
+                    "waiverOfSubrogationNumberOfContracts": $("#numberOfContracts").valueOf().val(),
+                    "premiumDiscountPlan": $("#premiumDiscountPlan").valueOf().val(),
+                    "selectForeignTerrorismCoverage": $("#selectForeignTerrorismCoverage").valueOf().val(),
+                    "selectDomesticTerrorismCoverage": $("#selectDomesticTerrorismCoverage").valueOf().val(),
+                    "dividendPercent": $("#dividendPercent").valueOf().val(),
+                    "purchaseWaiverOfSubrogationBlanket": $("#purchaseWaiverOfSubrogationBlanket").valueOf().val(),
+                    "purchaseWaiverOfSubrogationBlanketPerContract": $("#purchaseWaiverOfSubrogationBlanketPerContract").valueOf().val(),
+                    "numberOfContracts": $("#numberOfContracts").valueOf().val()
+                };
+
+            $.ajax({
+                url: 'https://darsrn7pi4.execute-api.us-east-2.amazonaws.com/default/jasonWiRater3',
+                type: 'POST',
+                data: JSON.stringify(request),
+                crossDomain: true,
+                beforeSend: function (xhr) {
+                    xhr.withCredentials = true;
+                },
+                success: function (result) {
+                    // Do something with the result
+                    displayResponse( result );
+                    console.log(result);
+                }
+            });
+
+            return -1;
+        }
+
+
+        let displayResponse = function( response ){
+
+            if( response.status === "declined" )
+                $("#results").css("background-color", "pink");
+            else
+                $("#results").css("background-color", "green");
+
+           // let resultHtml = JSON.stringify(response, null, "\t");
+           // $('#results').html(resultHtml);
+            // var tr=[];
+            // for (var i = 0; i < json.length; i++) {
+            //     tr.push('<tr>');
+            //     tr.push("<td>" + json[i].User_Name + "</td>");
+            //     tr.push("<td>" + json[i].score + "</td>");
+            //     tr.push("<td>" + json[i].team + "</td>");
+            //     tr.push('</tr>');
+            // }
+            // $('#results').html($(tr.join('')));
+
+            $("#status").html(response.status);
+            $("#explanation").html(response.explanation);
+            $("#payrollClassesPremiumTotal").html(response.payrollClassesPremiumTotal);
+            $("#nonPayrollClassesPremiumTotal").html(response.nonPayrollClassesPremiumTotal);
+            $("#expModifiedSubjectPremiumExcludingEL").html(response.expModifiedSubjectPremiumExcludingEL);
+            $("#maxClassMinimumPremium").html(response.maxClassMinimumPremium);
+            $("#balanceToAchieveMinimumPremium").html(response.balanceToAchieveMinimumPremium);
+            $("#balalanceToMinimumPremiumAdmiraltyFELA").html(response.balalanceToMinimumPremiumAdmiraltyFELA);
+            $("#estimatedAnnualPremium").html(response.estimatedAnnualPremium);
+            $("#estimatedDividend").html(response.estimatedDividend);
+
+            $("#results").show();
+
+            var html = "<table><tr><th>Sequence</th><th>Trace event</th></tr>";
+            for( i = 0; i < response.trace.length; i++ ){
+                html += "<tr><td>" + response.trace[i].index + "</td><td>" + response.trace[i].text + "</td></tr>";
+            }
+            html += "</table>";
+
+            console.log(html);
+            $("#trace").html(html);
+
+
+
+            // Status: <span id="status"></span><br>
+            // Explanation: <span id="explanation"></span><br>
+            // payrollClassesPremiumTotal: <span id="payrollClassesPremiumTotal"></span><br>
+            // nonPayrollClassesPremiumTotal: <span id="nonPayrollClassesPremiumTotal"></span><br>
+            // expModifiedSubjectPremiumExcludingEL: <span id="expModifiedSubjectPremiumExcludingEL"></span><br>
+            // maxClassMinimumPremium: <span id="maxClassMinimumPremium"></span><br>
+            // balanceToAchieveMinimumPremium: <span id="balanceToAchieveMinimumPremium"></span><br>
+            // balalanceToMinimumPremiumAdmiraltyFELA: <span id="balalanceToMinimumPremiumAdmiraltyFELA"></span><br>
+            // estimatedAnnualPremium": <span id="estimatedAnnualPremium"></span><br>
+            // estimatedDividend": <span id="estimatedDividend"></span><br>
+        }
     </script>
 </head>
 <body>
 
-i'm alive!
+    <table>
+        <tr>
+            <td>State</td>
+            <td>
+                <select id="state">
+                    <option value="WI">Wisconsin</option>
+                    <option value="MN">Minnesota</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Assigned Risk</td>
+            <td>
+                <input id="assignedRisk" type="checkbox" value="true">
+            </td>
+        </tr>
+        <tr>
+            <td>Payroll classes</td>
+            <td>
+                <table>
+                    <tr>
+                        <th>Class Code</th>
+                        <th>Payroll</th>
+                        <th>Employee Count</th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input id="class1" type="text" value="2003">
+                        </td>
+                        <td>
+                            <input id="payroll1" type="text" value="50000">
+                        </td>
+                        <td>
+                            <input id="employeeCount1" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="class2" type="text" value="2014">
+                        </td>
+                        <td>
+                            <input id="payroll2" type="text" value="50000">
+                        </td>
+                        <td>
+                            <input id="employeeCount2" type="text" value="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="class3" type="text" value="2111">
+                        </td>
+                        <td>
+                            <input id="payroll3" type="text" value="2000">
+                        </td>
+                        <td>
+                            <input id="employeeCount3" type="text" value="2">
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        <tr>
+            <td>Waiver of Subrogation per contract</td>
+            <td>
+                <input id="waiverOfSubrogationPurchasePerContract" type="checkbox" value="true">
+            </td>
+        </tr>
+        <tr>
+            <td>Employer's Liability Limit (thousands ?????)</td>
+            <td>
+                <select id="employersLiabilityLimit">
+                    <option value="100/100/100">100/100/100</option>
+                    <option value="500/500/500">500/500/500</option>
+                    <option value="3000/3000/3000" selected>3,000/3,000/3,000</option>
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Experience Mod</td>
+            <td>
+                <input id="experienceMod" type="text" value="1.2">
+            </td>
+        </tr>
+        <tr>
+            <td>waiverOfSubrogationPurchasePerContract</td>
+            <td>
+                <input id="waiverOfSubrogationPurchasePerContract" type="checkbox" value="ON" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>numberOfContracts</td>
+            <td>
+                <input id="numberOfContracts" type="text" value="5">
+            </td>
+        </tr>
+        <tr>
+            <td>premiumDiscountPlan</td>
+            <td>
+                <select id="premiumDiscountPlan">
+                    <option value="A" selected>A</option>
+                    <option value="B">B</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>selectForeignTerrorismCoverage</td>
+            <td>
+                <input id="selectForeignTerrorismCoverage" type="checkbox" value="ON" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>selectDomesticTerrorismCoverage</td>
+            <td>
+                <input id="selectDomesticTerrorismCoverage" type="checkbox" value="ON" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>dividendPercent (set by agent?)</td>
+            <td>
+                <input id="dividendPercent" type="text" value="0.25">
+            </td>
+        </tr>
+        <tr>
+            <td>purchaseWaiverOfSubrogationBlanket</td>
+            <td>
+                <input id="purchaseWaiverOfSubrogationBlanket" type="checkbox" value="ON" checked>
+            </td>
+        </tr>
+        <tr>
+            <td>purchaseWaiverOfSubrogationBlanketPerContract</td>
+            <td>
+                <input id="purchaseWaiverOfSubrogationBlanketPerContract" type="checkbox" value="ON" checked>
+            </td>
+        </tr>
+    </table>
+
+    <button id="btnGetRate">Get a rate now</button>
+
+    <table>
+        <tr>
+            <td>
+                <div id="results">
+                    Status: <span id="status" style="font-weight: bold"></span><br>
+                    Explanation: <span id="explanation"></span><br>
+                    payrollClassesPremiumTotal: <span id="payrollClassesPremiumTotal"></span><br>
+                    nonPayrollClassesPremiumTotal: <span id="nonPayrollClassesPremiumTotal"></span><br>
+                    expModifiedSubjectPremiumExcludingEL: <span id="expModifiedSubjectPremiumExcludingEL"></span><br>
+                    maxClassMinimumPremium: <span id="maxClassMinimumPremium"></span><br>
+                    balanceToAchieveMinimumPremium: <span id="balanceToAchieveMinimumPremium"></span><br>
+                    balalanceToMinimumPremiumAdmiraltyFELA: <span id="balalanceToMinimumPremiumAdmiraltyFELA"></span><br>
+                    estimatedAnnualPremium: <span id="estimatedAnnualPremium" style="font-weight: bold"></span><br>
+                    estimatedDividend: <span id="estimatedDividend"></span><br>
+                </div>
+            </td>
+            <td>
+                Trace:<br>
+                <div id="trace">
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
 
 </body>
 </html>
