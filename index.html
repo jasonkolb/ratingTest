@@ -14,6 +14,10 @@
             color: maroon;
             margin-left: 40px;
         }
+
+        tr {
+            vertical-align: top;
+        }
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
@@ -45,14 +49,12 @@
                     ],
                     "employersLiabilityLimit": $("#employersLiabilityLimit").valueOf().val(),
                     "experienceMod": $("#experienceMod").valueOf().val(),
-                    "waiverOfSubrogationPurchasePerContract": $("#waiverOfSubrogationPurchasePerContract").valueOf().val(),
-                    "waiverOfSubrogationNumberOfContracts": $("#numberOfContracts").valueOf().val(),
                     "premiumDiscountPlan": $("#premiumDiscountPlan").valueOf().val(),
-                    "selectForeignTerrorismCoverage": $("#selectForeignTerrorismCoverage").valueOf().val(),
-                    "selectDomesticTerrorismCoverage": $("#selectDomesticTerrorismCoverage").valueOf().val(),
+                    "selectForeignTerrorismCoverage": $("#selectForeignTerrorismCoverage").prop('checked'),
+                    "selectDomesticTerrorismCoverage": $("#selectDomesticTerrorismCoverage").prop('checked'),
                     "dividendPercent": $("#dividendPercent").valueOf().val(),
-                    "purchaseWaiverOfSubrogationBlanket": $("#purchaseWaiverOfSubrogationBlanket").valueOf().val(),
-                    "purchaseWaiverOfSubrogationBlanketPerContract": $("#purchaseWaiverOfSubrogationBlanketPerContract").valueOf().val(),
+                    "purchaseWaiverOfSubrogationBlanket": $("#purchaseWaiverOfSubrogationBlanket").prop('checked'),
+                    "purchaseWaiverOfSubrogationBlanketPerContract": $("#purchaseWaiverOfSubrogationBlanketPerContract").prop('checked'),
                     "numberOfContracts": $("#numberOfContracts").valueOf().val()
                 };
 
@@ -107,14 +109,18 @@
 
             $("#results").show();
 
-            var html = "<table><tr><th>Sequence</th><th>Trace event</th></tr>";
-            for( i = 0; i < response.trace.length; i++ ){
-                html += "<tr><td>" + response.trace[i].index + "</td><td>" + response.trace[i].text + "</td></tr>";
-            }
-            html += "</table>";
+            {
+                let html = "<table><tr><th>Sequence</th><th>Trace event</th></tr>";
+                for (i = 0; i < response.trace.length; i++) {
+                    html += "<tr><td>" + response.trace[i].index + "</td><td>" + response.trace[i].text + "</td></tr>";
+                }
+                html += "</table>";
 
-            console.log(html);
-            $("#trace").html(html);
+                $("#trace").html("");
+
+                console.log(html);
+                $("#trace").html(html);
+            }
 
 
 
@@ -217,12 +223,6 @@
             <td>Experience Mod</td>
             <td>
                 <input id="experienceMod" type="text" value="1.2">
-            </td>
-        </tr>
-        <tr>
-            <td>waiverOfSubrogationPurchasePerContract</td>
-            <td>
-                <input id="waiverOfSubrogationPurchasePerContract" type="checkbox" value="ON" checked>
             </td>
         </tr>
         <tr>
