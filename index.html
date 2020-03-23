@@ -47,9 +47,13 @@
                         {"classId": $("#class2").valueOf().val(), "payroll": $("#payroll2").valueOf().val(), "employeeCount": $("#employeeCount2").valueOf().val()},
                         {"classId": $("#class3").valueOf().val(), "payroll": $("#payroll3").valueOf().val(), "employeeCount": $("#employeeCount3").valueOf().val()},
                     ],
+                    "carrierOptions": {
+                        "carrierForeignTerrorismRate": $("#carrierForeignTerrorismRate").valueOf().val(),
+                        "carrierDomesticTerrorismRate": $("#carrierDomesticTerrorismRate").valueOf().val(),
+                        "premiumDiscountPlan": $("#premiumDiscountPlan").valueOf().val()
+                    },
                     "employersLiabilityLimit": $("#employersLiabilityLimit").valueOf().val(),
                     "experienceMod": $("#experienceMod").valueOf().val(),
-                    "premiumDiscountPlan": $("#premiumDiscountPlan").valueOf().val(),
                     "selectForeignTerrorismCoverage": $("#selectForeignTerrorismCoverage").prop('checked'),
                     "selectDomesticTerrorismCoverage": $("#selectDomesticTerrorismCoverage").prop('checked'),
                     "dividendPercent": $("#dividendPercent").valueOf().val(),
@@ -162,6 +166,38 @@
             </td>
         </tr>
         <tr>
+            <td>(Carrier Option) Discount Plan</td>
+            <td>
+                <select id="premiumDiscountPlan">
+                    <option value="A" selected>A</option>
+                    <option value="B">B</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>(Carrier Option) Domestic Terrorism Rate</td>
+            <td>
+                <select id="carrierDomesticTerrorismRate">
+                    <option value="0.00">$0.00</option>
+                    <option value="0.01" selected>$.0.01</option>
+                    <option value="0.02">$0.02</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>(Carrier Option) Foreign Terrorism Rate</td>
+            <td>
+                <select id="carrierForeignTerrorismRate">
+                    <option value="0.00">$0.00</option>
+                    <option value="0.01" selected>$.0.01</option>
+                    <option value="0.02">$0.02</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Exposure information:</td>
+        </tr>
+        <tr>
             <td>Payroll classes</td>
             <td>
                 <table>
@@ -235,15 +271,6 @@
             <td>numberOfContracts</td>
             <td>
                 <input id="numberOfContracts" type="text" value="5">
-            </td>
-        </tr>
-        <tr>
-            <td>premiumDiscountPlan</td>
-            <td>
-                <select id="premiumDiscountPlan">
-                    <option value="A" selected>A</option>
-                    <option value="B">B</option>
-                </select>
             </td>
         </tr>
         <tr>
